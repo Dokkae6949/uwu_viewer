@@ -1,0 +1,3 @@
+[submodule "src-tauri/libs/waifu_pics_api"]
+	path = src-tauri/libs/waifu_pics_api
+	url = https://github.com/Dokkae6949/waifu_pics_api
