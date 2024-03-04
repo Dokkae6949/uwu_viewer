@@ -8,6 +8,7 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 async fn get_waifu_image_url(config: Type) -> String {
+    println!("Type: {:?}", Type::Nsfw(waifu_pics_api::NsfwCategory::Neko));
     let image_url = get_image_url(&config).await;
 
     if let Ok(url) = image_url {
