@@ -1,56 +1,69 @@
-import {useState} from "react";
-import reactLogo from "./assets/react.svg";
-import {invoke} from "@tauri-apps/api/core";
+import {useEffect, useRef, useState} from "react";
 import "./App.css";
-import {fetchWaifuImageUrl} from "./waifu_pics_api/waifu_pics_api.ts";
+import {fetchWaifuImageUrl, fetchWaifuImageUrls} from "./waifu_pics_api/waifu_pics_api.ts";
 import {NsfwCategory, Type} from "./waifu_pics_api/waifu_pics_api_types.ts";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+    const [images, setImages] = useState<string[]>([]); // Explizite Typangabe für den initialen State als leeres Array
+    const [loading, setLoading] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null); // Typangabe für useRef
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-    console.log(await fetchWaifuImageUrl({type: Type.Nsfw, category: NsfwCategory.Neko}));
-  }
+    useEffect(() => {
+        const fetchImages = async () => {
+            setLoading(true);
+            try {
+                const fetchedImages = await fetchWaifuImageUrls(
+                    {type: Type.Nsfw, category: NsfwCategory.Neko},
+                );
 
-  return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
+                setImages((prevImages) => [...prevImages, ...fetchedImages]);
+                console.log("Fetched images:", fetchedImages);
+            } catch (error) {
+                console.error("Error fetching images:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (loading) return;
+        fetchImages();
 
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                fetchImages();
+            }
+        }, {threshold: 1});
 
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+        const loadingElement = document.querySelector('.loading');
+        if (loadingElement) {
+            observer.current!.observe(loadingElement);
+        }
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
+        return () => {
+            if (observer.current) {
+                observer.current.disconnect();
+            }
+        };
+    }, []);
 
-      <p>{greetMsg}</p>
-    </div>
-  );
+    console.log(images)
+    return (
+        <div>
+            <div className="image-stack" style={{maxWidth: "100vw", alignItems: "center", alignContent: "center", justifyContent: "center"}}>
+                {images.map((image, index) => (
+                    <div key={index} className="image-item">
+                        <img style={{
+                            display: "block",
+                            maxWidth: "95vw",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            width: "50%"
+                        }} src={image} alt={`Image ${index}`}/>
+                    </div>
+                ))}
+            </div>
+            {loading && <div className="loading">Loading...</div>}
+        </div>
+    );
 }
 
 export default App;

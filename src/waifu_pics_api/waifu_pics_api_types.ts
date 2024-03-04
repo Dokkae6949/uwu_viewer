@@ -41,6 +41,6 @@ export enum NsfwCategory {
 }
 
 export enum Type {
-    Sfw = "Sfw",
-    Nsfw = "Nsfw",
+    "Sfw" = "Sfw",
+    "Nsfw" = "Nsfw",
 }

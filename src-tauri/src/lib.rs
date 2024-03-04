@@ -1,4 +1,4 @@
-use waifu_pics_api::{get_image_url, get_image_urls, Type};
+use waifu_pics_api::{Error, get_image_url, get_image_urls, Type};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -18,10 +18,10 @@ async fn get_waifu_image_url(config: String) -> String {
 }
 
 #[tauri::command]
-async fn get_waifu_image_urls(config: String, excluded_urls: Vec<String>) -> Vec<String> {
+async fn get_waifu_image_urls(config: String, excluded: Vec<String>) -> Vec<String> {
     let image_urls = get_image_urls(
         &serde_json::from_str::<Type>(&config).unwrap(),
-        excluded_urls
+        excluded,
     ).await;
 
     if let Ok(urls) = image_urls {
