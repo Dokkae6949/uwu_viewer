@@ -1,3 +1,4 @@
+use serde::__private::ser::constrain;
 use waifu_pics_api::{get_image_url, get_image_urls, Type};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -7,9 +8,8 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-async fn get_waifu_image_url(config: Type) -> String {
-    println!("Type: {:?}", Type::Nsfw(waifu_pics_api::NsfwCategory::Neko));
-    let image_url = get_image_url(&config).await;
+async fn get_waifu_image_url(config: String) -> String {
+    let image_url = get_image_url(&serde_json::from_str::<Type>(&config).unwrap()).await;
 
     if let Ok(url) = image_url {
         url
@@ -19,8 +19,11 @@ async fn get_waifu_image_url(config: Type) -> String {
 }
 
 #[tauri::command]
-async fn get_waifu_image_urls(config: Type, excluded_urls: Vec<String>) -> Vec<String> {
-    let image_urls = get_image_urls(&config, excluded_urls).await;
+async fn get_waifu_image_urls(config: String, excluded_urls: Vec<String>) -> Vec<String> {
+    let image_urls = get_image_urls(
+        &serde_json::from_str::<Type>(&config).unwrap(),
+        excluded_urls
+    ).await;
 
     if let Ok(urls) = image_urls {
         urls

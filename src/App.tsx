@@ -1,7 +1,9 @@
-import { useState } from "react";
+import {useState} from "react";
 import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import {invoke} from "@tauri-apps/api/core";
 import "./App.css";
+import {fetchWaifuImageUrl} from "./waifu_pics_api/waifu_pics_api.ts";
+import {NsfwCategory, Type} from "./waifu_pics_api/waifu_pics_api_types.ts";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -10,6 +12,7 @@ function App() {
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     setGreetMsg(await invoke("greet", { name }));
+    console.log(await fetchWaifuImageUrl({type: Type.Nsfw, category: NsfwCategory.Neko}));
   }
 
   return (
