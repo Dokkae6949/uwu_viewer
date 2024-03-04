@@ -1,4 +1,4 @@
-use waifu_pics_api::{Error, get_image_url, get_image_urls, Type};
+use waifu_pics_api::{get_image_url, get_image_urls, Type};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -7,13 +7,25 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-async fn get_waifu_image_url(config: &Type) -> Result<String, Error> {
-    Ok(get_image_url(config).await?)
+async fn get_waifu_image_url(config: Type) -> String {
+    let image_url = get_image_url(&config).await;
+
+    if let Ok(url) = image_url {
+        url
+    } else {
+        String::new()
+    }
 }
 
 #[tauri::command]
-async fn get_waifu_image_urls(config: &Type, excluded_urls: Vec<String>) -> Result<Vec<String>, Error> {
-    Ok(get_image_urls(config, excluded_urls).await?)
+async fn get_waifu_image_urls(config: Type, excluded_urls: Vec<String>) -> Vec<String> {
+    let image_urls = get_image_urls(&config, excluded_urls).await;
+
+    if let Ok(urls) = image_urls {
+        urls
+    } else {
+        vec![]
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
