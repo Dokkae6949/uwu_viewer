@@ -20,7 +20,7 @@ async fn get_waifu_image_urls(config: &Type, excluded_urls: Vec<String>) -> Resu
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet, get_image_url, get_image_urls])
+        .invoke_handler(tauri::generate_handler![greet, get_waifu_image_url, get_waifu_image_urls])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
