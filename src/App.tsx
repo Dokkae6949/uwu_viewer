@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import "./App.css";
-import {fetchWaifuImageUrl, fetchWaifuImageUrls} from "./waifu_pics_api/waifu_pics_api.ts";
+import {fetchWaifuImageUrls} from "./waifu_pics_api/waifu_pics_api.ts";
 import {NsfwCategory, Type} from "./waifu_pics_api/waifu_pics_api_types.ts";
 
 function App() {
