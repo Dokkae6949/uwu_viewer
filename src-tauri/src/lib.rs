@@ -1,4 +1,4 @@
-use waifu_pics_api::{Error, get_image_url, get_image_urls, Type};
+use waifu_pics_api::{get_image_url, get_image_urls, Type};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
