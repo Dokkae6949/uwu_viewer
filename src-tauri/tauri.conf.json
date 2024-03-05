@@ -1,7 +1,7 @@
 {
   "productName": "uwu_viewer",
   "version": "0.0.0",
-  "identifier": "at.uwu-girls.viewer",
+  "identifier": "at.uwu.girls.viewer",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
