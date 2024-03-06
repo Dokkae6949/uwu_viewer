@@ -16,7 +16,7 @@ function App() {
         setLoading(true);
         try {
             const fetchedImages = await fetchWaifuImageUrls(
-                { type: Type.Nsfw, category: NsfwCategory.Neko }
+                { type: Type.Nsfw, category: NsfwCategory.Neko }, images
             );
 
             setImages(prevImages => [...prevImages, ...fetchedImages]);
@@ -69,23 +69,23 @@ function App() {
     console.log(images)
     return (
         <div>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} className="gridContainer">
                 {images.map((image, index) => (
-                    <Grid xs={6} sm={4} md={2} key={index}>
+                    <Grid className={"imageContainer"} xs={6} sm={4} md={2} key={index} >
                         {index === images.length - 1 ? ( // Wenn es sich um das letzte Bild handelt, setze das Ref
                             <div ref={lastImageRef}>
-                                <img className="image" onClick={() => handleClickImage(image)} style={{ width: "100%", height: "auto" }} src={image} alt={`Image ${index}`} />
+                                <img className="image" onClick={() => handleClickImage(image)} src={image} alt={`Image ${index}`} />
                             </div>
                         ) : (
-                            <img className="image" onClick={() => handleClickImage(image)} style={{ width: "100%", height: "auto" }} src={image} alt={`Image ${index}`} />
+                            <img className="image" onClick={() => handleClickImage(image)} src={image} alt={`Image ${index}`} />
                         )}
                     </Grid>
                 ))}
             </Grid>
             {loading && <div className="loading">Loading...</div>}
             <Dialog open={!!selectedImage} onClose={handleCloseImage}> {/* Wenn selectedImage nicht null ist, öffne das Dialogfenster */}
-                <DialogContent>
-                    <img src={selectedImage as string | undefined} alt="Selected Image" style={{ maxWidth: "100%", height: "auto" }} />
+                <DialogContent style={{ display: "flex", padding: "1rem", backgroundColor: "#2f2f2f"}}>
+                    <img src={selectedImage as string | undefined} alt="Selected Image" style={{ maxWidth: "100%", height: "auto"}} />
                 </DialogContent>
             </Dialog>
         </div>

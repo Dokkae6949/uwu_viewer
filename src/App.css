@@ -1,7 +1,24 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+.container {
+  display: flex;
+  flex-direction: column; /* Spaltenlayout */
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+.gridContainer {
+  flex-grow: 1; /* Lassen Sie den Grid-Container so groß wie möglich wachsen */
+  display: flex;
+  flex-direction: column; /* Spaltenlayout */
+  align-items: center; /* Vertikales Zentrieren der Grid-Elemente */
+  border: 1px solid #ccc;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center; /* Horizontales Zentrieren des Bildes */
+  align-items: center; /* Vertikales Zentrieren des Bildes */
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 2%;
 }
